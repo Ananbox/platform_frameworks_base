@@ -766,7 +766,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     private WindowContentFrameStats mTempWindowRenderStats;
 
-    AnboxPlatformServiceProxy mPlatformServiceProxy;
+    // AnboxPlatformServiceProxy mPlatformServiceProxy;
 
     final class DragInputEventReceiver extends InputEventReceiver {
         // Set, if stylus button was down at the start of the drag.
@@ -1030,7 +1030,7 @@ public class WindowManagerService extends IWindowManager.Stub
         mAppOps.startWatchingMode(AppOpsManager.OP_TOAST_WINDOW, null, opListener);
 
         // This will setup the proxy instance we use to talk with the Anbox host side
-        mPlatformServiceProxy = new AnboxPlatformServiceProxy(this, null);
+        // mPlatformServiceProxy = new AnboxPlatformServiceProxy(this, null);
 
         // Get persisted window scale setting
         mWindowAnimationScaleSetting = Settings.Global.getFloat(context.getContentResolver(),
@@ -2581,7 +2581,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         mPendingRemove.remove(win);
 
-        mPlatformServiceProxy.removeWindow(win);
+        // mPlatformServiceProxy.removeWindow(win);
 
         mResizingWindows.remove(win);
         mWindowsChanged = true;
@@ -6070,7 +6070,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     Slog.e(TAG_WM, "Boot completed: SurfaceFlinger is dead!");
                 }
                 // Let anbox host service know that we have successfully booted
-                mPlatformServiceProxy.notifyBootFinished();
+                // mPlatformServiceProxy.notifyBootFinished();
                 mBootAnimationStopped = true;
             }
 

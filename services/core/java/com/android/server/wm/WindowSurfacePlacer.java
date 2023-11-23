@@ -187,7 +187,7 @@ class WindowSurfacePlacer {
         } while (mTraversalScheduled && loopCount > 0);
         mWallpaperActionPending = false;
 
-        mService.mPlatformServiceProxy.updateWindowState();
+        // mService.mPlatformServiceProxy.updateWindowState();
     }
 
     private void performSurfacePlacementLoop() {
