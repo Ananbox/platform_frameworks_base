@@ -580,12 +580,16 @@ void android_os_Process_setArgV0(JNIEnv* env, jobject clazz, jstring name)
 
 jint android_os_Process_setUid(JNIEnv* env, jobject clazz, jint uid)
 {
-    return setuid(uid) == 0 ? 0 : errno;
+    // ananbox: disable setuid
+    // return setuid(uid) == 0 ? 0 : errno;
+    return 0;
 }
 
 jint android_os_Process_setGid(JNIEnv* env, jobject clazz, jint uid)
 {
-    return setgid(uid) == 0 ? 0 : errno;
+    // ananbox: disable setgid
+    // return setgid(uid) == 0 ? 0 : errno;
+    return 0;
 }
 
 static int pid_compare(const void* v1, const void* v2)

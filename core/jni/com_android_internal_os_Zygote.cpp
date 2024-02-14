@@ -175,12 +175,15 @@ static void SetGids(JNIEnv* env, jintArray javaGids) {
   if (gids.get() == NULL) {
     RuntimeAbort(env, __LINE__, "Getting gids int array failed");
   }
+  // ananbox: disable setgroups
+#if 0
   int rc = setgroups(gids.size(), reinterpret_cast<const gid_t*>(&gids[0]));
   if (rc == -1) {
     std::ostringstream oss;
     oss << "setgroups failed: " << strerror(errno) << ", gids.size=" << gids.size();
     RuntimeAbort(env, __LINE__, oss.str().c_str());
   }
+#endif
 }
 
 // Sets the resource limits via setrlimit(2) for the values in the
@@ -273,7 +276,9 @@ static void SetSchedulerPolicy(JNIEnv* env) {
 #endif
 }
 
-static int UnmountTree(const char* path) {
+static int UnmountTree(const char* /*path*/) {
+    // ananbox: disable umount
+#if 0
     size_t path_len = strlen(path);
 
     FILE* fp = setmntent("/proc/mounts", "r");
@@ -298,6 +303,7 @@ static int UnmountTree(const char* path) {
             ALOGW("Failed to unmount %s: %s", path.c_str(), strerror(errno));
         }
     }
+#endif
     return 0;
 }
 
@@ -306,7 +312,8 @@ static int UnmountTree(const char* path) {
 static bool MountEmulatedStorage(uid_t uid, jint mount_mode,
         bool force_mount_namespace) {
     // See storage config details at http://source.android.com/tech/storage/
-
+    // ananbox: disable mount
+#if 0
     // Create a second private mount namespace for our process
     if (unshare(CLONE_NEWNS) == -1) {
         ALOGW("Failed to unshare(): %s", strerror(errno));
@@ -329,6 +336,7 @@ static bool MountEmulatedStorage(uid_t uid, jint mount_mode,
         ALOGW("Failed to mount %s to /storage: %s", storageSource.string(), strerror(errno));
         return false;
     }
+#endif
 
     // Mount user-specific symlink helper into place
     userid_t user_id = multiuser_get_user_id(uid);
@@ -336,11 +344,13 @@ static bool MountEmulatedStorage(uid_t uid, jint mount_mode,
     if (fs_prepare_dir(userSource.string(), 0751, 0, 0) == -1) {
         return false;
     }
+#if 0
     if (TEMP_FAILURE_RETRY(mount(userSource.string(), "/storage/self",
             NULL, MS_BIND, NULL)) == -1) {
         ALOGW("Failed to mount %s to /storage/self: %s", userSource.string(), strerror(errno));
         return false;
     }
+#endif
 
     return true;
 }
@@ -446,7 +456,7 @@ static void SetForkLoad(bool boost) {
 #endif
 
 // The list of open zygote file descriptors.
-static FileDescriptorTable* gOpenFdTable = NULL;
+// static FileDescriptorTable* gOpenFdTable = NULL;
 
 // Utility routine to fork zygote and specialize the child process.
 static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray javaGids,
@@ -483,6 +493,7 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
   // If this is the first fork for this zygote, create the open FD table.
   // If it isn't, we just need to check whether the list of open files has
   // changed (and it shouldn't in the normal case).
+#if 0
   if (gOpenFdTable == NULL) {
     gOpenFdTable = FileDescriptorTable::Create();
     if (gOpenFdTable == NULL) {
@@ -491,6 +502,7 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
   } else if (!gOpenFdTable->Restat()) {
     RuntimeAbort(env, __LINE__, "Unable to restat file descriptor table.");
   }
+#endif
 
   pid_t pid = fork();
 
@@ -503,9 +515,11 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
 
     // Re-open all remaining open file descriptors so that they aren't shared
     // with the zygote across a fork.
+#if 0
     if (!gOpenFdTable->ReopenOrDetach()) {
       RuntimeAbort(env, __LINE__, "Unable to reopen whitelisted descriptors.");
     }
+#endif
 
     if (sigprocmask(SIG_UNBLOCK, &sigchld, nullptr) == -1) {
       ALOGE("sigprocmask(SIG_SETMASK, { SIGCHLD }) failed: %s", strerror(errno));
@@ -568,6 +582,8 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
       android::PreInitializeNativeBridge(data_dir.c_str(), isa_string.c_str());
     }
 
+    // ananbox: disable setresgid, setresuid
+#if 0
     int rc = setresgid(gid, gid, gid);
     if (rc == -1) {
       ALOGE("setresgid(%d) failed: %s", gid, strerror(errno));
@@ -579,6 +595,7 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
       ALOGE("setresuid(%d) failed: %s", uid, strerror(errno));
       RuntimeAbort(env, __LINE__, "setresuid failed");
     }
+#endif
 
     if (NeedsNoRandomizeWorkaround()) {
         // Work around ARM kernel ASLR lossage (http://b/5817320).
@@ -611,12 +628,15 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
           RuntimeAbort(env, __LINE__, "se_name_c_str == NULL");
         }
     }
+    // ananbox: disable selinux
+#if 0
     rc = selinux_android_setcontext(uid, is_system_server, se_info_c_str, se_name_c_str);
     if (rc == -1) {
       ALOGE("selinux_android_setcontext(%d, %d, \"%s\", \"%s\") failed", uid,
             is_system_server, se_info_c_str, se_name_c_str);
       RuntimeAbort(env, __LINE__, "selinux_android_setcontext failed");
     }
+#endif
 
     // Make it easier to debug audit logs by setting the main thread's name to the
     // nice name rather than "app_process".
