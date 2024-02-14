@@ -1203,6 +1203,10 @@ final class UserController {
 
     int handleIncomingUser(int callingPid, int callingUid, int userId, boolean allowAll,
             int allowMode, String name, String callerPackage) {
+        // ananbox: return target userId
+        int targetUserId = unsafeConvertIncomingUserLocked(userId);
+        return targetUserId;
+        /*
         final int callingUserId = UserHandle.getUserId(callingUid);
         if (callingUserId == userId) {
             return userId;
@@ -1280,6 +1284,7 @@ final class UserController {
             }
         }
         return targetUserId;
+        */
     }
 
     int unsafeConvertIncomingUserLocked(int userId) {
@@ -1289,6 +1294,8 @@ final class UserController {
 
     void registerUserSwitchObserver(IUserSwitchObserver observer, String name) {
         Preconditions.checkNotNull(name, "Observer name cannot be null");
+        // ananbox: disable permission check
+        /*
         if (mService.checkCallingPermission(INTERACT_ACROSS_USERS_FULL)
                 != PackageManager.PERMISSION_GRANTED) {
             final String msg = "Permission Denial: registerUserSwitchObserver() from pid="
@@ -1298,6 +1305,7 @@ final class UserController {
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         mUserSwitchObservers.register(observer, name);
     }
 

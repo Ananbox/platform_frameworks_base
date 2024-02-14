@@ -326,6 +326,8 @@ public class MediaSessionService extends SystemService implements Monitor {
     }
 
     private void enforcePackageName(String packageName, int uid) {
+        // ananbox: disable enforcePackageName
+        /*
         if (TextUtils.isEmpty(packageName)) {
             throw new IllegalArgumentException("packageName may not be empty");
         }
@@ -337,6 +339,7 @@ public class MediaSessionService extends SystemService implements Monitor {
             }
         }
         throw new IllegalArgumentException("packageName is not owned by the calling process");
+        */
     }
 
     /**

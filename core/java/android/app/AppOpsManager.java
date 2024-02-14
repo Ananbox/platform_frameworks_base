@@ -1652,6 +1652,8 @@ public class AppOpsManager {
      *             UID, or if ownership cannot be verified.
      */
     public void checkPackage(int uid, String packageName) {
+        // ananbox: disable checkPackage
+        /*
         try {
             if (mService.checkPackage(uid, packageName) != MODE_ALLOWED) {
                 throw new SecurityException(
@@ -1660,6 +1662,7 @@ public class AppOpsManager {
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }
+        */
     }
 
     /**

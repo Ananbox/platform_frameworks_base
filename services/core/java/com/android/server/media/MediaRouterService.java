@@ -121,9 +121,11 @@ public final class MediaRouterService extends IMediaRouterService.Stub
         }
 
         final int uid = Binder.getCallingUid();
+        /*
         if (!validatePackageName(uid, packageName)) {
             throw new SecurityException("packageName must match the calling uid");
         }
+        */
 
         final int pid = Binder.getCallingPid();
         final int resolvedUserId = ActivityManager.handleIncomingUser(pid, uid, userId,

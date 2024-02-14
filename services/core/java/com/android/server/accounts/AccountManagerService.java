@@ -5315,6 +5315,9 @@ public class AccountManagerService
     }
 
     private boolean isPermitted(String opPackageName, int callingUid, String... permissions) {
+        // ananbox: disable permission check
+        return true;
+        /*
         for (String perm : permissions) {
             if (mContext.checkCallingOrSelfPermission(perm) == PackageManager.PERMISSION_GRANTED) {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
@@ -5328,6 +5331,7 @@ public class AccountManagerService
             }
         }
         return false;
+        */
     }
 
     private int handleIncomingUser(int userId) {

@@ -1502,9 +1502,12 @@ public class UserManagerService extends IUserManager.Stub {
      * @see #hasManageUsersPermission()
      */
     private static final void checkManageUsersPermission(String message) {
+        // ananbox: disable permission check
+        /*
         if (!hasManageUsersPermission()) {
             throw new SecurityException("You need MANAGE_USERS permission to: " + message);
         }
+        */
     }
 
     /**
@@ -1518,10 +1521,13 @@ public class UserManagerService extends IUserManager.Stub {
      * @see #hasManageOrCreateUsersPermission()
      */
     private static final void checkManageOrCreateUsersPermission(String message) {
+        // ananbox: disable permission check
+        /*
         if (!hasManageOrCreateUsersPermission()) {
             throw new SecurityException(
                     "You either need MANAGE_USERS or CREATE_USERS permission to: " + message);
         }
+        */
     }
 
     /**

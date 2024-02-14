@@ -1389,9 +1389,12 @@ public final class DisplayManagerService extends SystemService {
                 IMediaProjection projection, String packageName, String name,
                 int width, int height, int densityDpi, Surface surface, int flags) {
             final int callingUid = Binder.getCallingUid();
+            // ananbox: disable package name check
+            /*
             if (!validatePackageName(callingUid, packageName)) {
                 throw new SecurityException("packageName must match the calling uid");
             }
+            */
             if (callback == null) {
                 throw new IllegalArgumentException("appToken must not be null");
             }

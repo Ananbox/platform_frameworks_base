@@ -1797,6 +1797,9 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
 
     @Override
     public boolean isSetWallpaperAllowed(String callingPackage) {
+        // ananbox: allow setwallpaper
+        return true;
+        /*
         final PackageManager pm = mContext.getPackageManager();
         String[] uidPackages = pm.getPackagesForUid(Binder.getCallingUid());
         boolean uidMatchPackage = Arrays.asList(uidPackages).contains(callingPackage);
@@ -1810,6 +1813,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub {
         }
         final UserManager um = (UserManager) mContext.getSystemService(Context.USER_SERVICE);
         return !um.hasUserRestriction(UserManager.DISALLOW_SET_WALLPAPER);
+        */
     }
 
     @Override

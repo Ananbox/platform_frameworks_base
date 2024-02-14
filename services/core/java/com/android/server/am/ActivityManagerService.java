@@ -4515,6 +4515,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             Intent intent, String resolvedType, IVoiceInteractionSession session,
             IVoiceInteractor interactor, int startFlags, ProfilerInfo profilerInfo,
             Bundle bOptions, int userId) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(Manifest.permission.BIND_VOICE_INTERACTION)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: startVoiceActivity() from pid="
@@ -4524,6 +4526,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         if (session == null || interactor == null) {
             throw new NullPointerException("null session or interactor");
         }
@@ -4718,12 +4721,15 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public final int startActivityFromRecents(int taskId, Bundle bOptions) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(START_TASKS_FROM_RECENTS) != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: startActivityFromRecents called without " +
                     START_TASKS_FROM_RECENTS;
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         final long origId = Binder.clearCallingIdentity();
         try {
             synchronized (this) {
@@ -4911,6 +4917,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public final void finishHeavyWeightApp() {
+        // ananbox: disable this permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: finishHeavyWeightApp() from pid="
@@ -4920,6 +4928,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
 
         synchronized(this) {
             if (mHeavyWeightProcess == null) {
@@ -4944,6 +4953,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     @Override
     public void crashApplication(int uid, int initialPid, String packageName,
             String message) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: crashApplication() from pid="
@@ -4953,6 +4964,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
 
         synchronized(this) {
             mAppErrors.scheduleAppCrashLocked(uid, initialPid, packageName, message);
@@ -5582,6 +5594,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public void killBackgroundProcesses(final String packageName, int userId) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES)
                 != PackageManager.PERMISSION_GRANTED &&
                 checkCallingPermission(android.Manifest.permission.RESTART_PACKAGES)
@@ -5593,6 +5607,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
 
         userId = mUserController.handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(),
                 userId, true, ALLOW_FULL_ONLY, "killBackgroundProcesses", null);
@@ -5620,6 +5635,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public void killAllBackgroundProcesses() {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES)
                 != PackageManager.PERMISSION_GRANTED) {
             final String msg = "Permission Denial: killAllBackgroundProcesses() from pid="
@@ -5628,6 +5645,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
 
         final long callingId = Binder.clearCallingIdentity();
         try {
@@ -5677,6 +5695,8 @@ public final class ActivityManagerService extends ActivityManagerNative
      *                     processes, or {@code -1} to ignore the process state
      */
     private void killAllBackgroundProcessesExcept(int minTargetSdk, int maxProcState) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.KILL_BACKGROUND_PROCESSES)
                 != PackageManager.PERMISSION_GRANTED) {
             final String msg = "Permission Denial: killAllBackgroundProcessesExcept() from pid="
@@ -5685,6 +5705,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
 
         final long callingId = Binder.clearCallingIdentity();
         try {
@@ -5718,6 +5739,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public void forceStopPackage(final String packageName, int userId) {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(android.Manifest.permission.FORCE_STOP_PACKAGES)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: forceStopPackage() from pid="
@@ -5727,6 +5750,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         final int callingPid = Binder.getCallingPid();
         userId = mUserController.handleIncomingUser(callingPid, Binder.getCallingUid(),
                 userId, true, ALLOW_FULL_ONLY, "forceStopPackage", null);
@@ -5801,7 +5825,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         int callerUid = Binder.getCallingUid();
         // Only the system server can kill an application
-        if (UserHandle.getAppId(callerUid) == Process.SYSTEM_UID) {
+        // ananbox: disable this check
+        //if (UserHandle.getAppId(callerUid) == Process.SYSTEM_UID) {
             // Post an aysnc message to kill the application
             Message msg = mHandler.obtainMessage(KILL_APPLICATION_MSG);
             msg.arg1 = appId;
@@ -5811,10 +5836,12 @@ public final class ActivityManagerService extends ActivityManagerNative
             bundle.putString("reason", reason);
             msg.obj = bundle;
             mHandler.sendMessage(msg);
+            /*
         } else {
             throw new SecurityException(callerUid + " cannot kill pkg: " +
                     pkg);
         }
+        */
     }
 
     @Override
@@ -7117,6 +7144,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                 // security checking for it above.
                 userId = UserHandle.USER_CURRENT;
             }
+            // ananbox: disable permission check
+            return getIntentSenderLocked(type, packageName, callingUid, userId,
+                    token, resultWho, requestCode, intents, resolvedTypes, flags, bOptions);
+            /*
             try {
                 if (callingUid != 0 && callingUid != Process.SYSTEM_UID) {
                     final int uid = AppGlobals.getPackageManager().getPackageUid(packageName,
@@ -7138,6 +7169,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             } catch (RemoteException e) {
                 throw new SecurityException(e);
             }
+            */
         }
     }
 
@@ -7296,6 +7328,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             try {
                 final int uid = AppGlobals.getPackageManager().getPackageUid(rec.key.packageName,
                         MATCH_DEBUG_TRIAGED_MISSING, UserHandle.getCallingUserId());
+                // ananbox: disable permission check
+                /*
                 if (!UserHandle.isSameApp(uid, Binder.getCallingUid())) {
                     String msg = "Permission Denial: cancelIntentSender() from pid="
                         + Binder.getCallingPid()
@@ -7305,6 +7339,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Slog.w(TAG, msg);
                     throw new SecurityException(msg);
                 }
+                */
             } catch (RemoteException e) {
                 throw new SecurityException(e);
             }
@@ -7685,8 +7720,12 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         @Override
         public boolean checkPermission(String permission, int pid, int uid) {
+            // ananbox: disable permission check
+            return true;
+            /*
             return mActivityManagerService.checkPermission(permission, pid,
                     uid) == PackageManager.PERMISSION_GRANTED;
+                    */
         }
 
         @Override
@@ -7727,11 +7766,15 @@ public final class ActivityManagerService extends ActivityManagerNative
      */
     int checkComponentPermission(String permission, int pid, int uid,
             int owningUid, boolean exported) {
+        // ananbox: disable permission check
+        return PackageManager.PERMISSION_GRANTED;
+        /*
         if (pid == MY_PID) {
             return PackageManager.PERMISSION_GRANTED;
         }
         return ActivityManager.checkComponentPermission(permission, uid,
                 owningUid, exported);
+                */
     }
 
     /**
@@ -7785,6 +7828,9 @@ public final class ActivityManagerService extends ActivityManagerNative
      * This can be called with or without the global lock held.
      */
     void enforceCallingPermission(String permission, String func) {
+        // ananbox: simply disable callingPermission check
+        return;
+        /*
         if (checkCallingPermission(permission)
                 == PackageManager.PERMISSION_GRANTED) {
             return;
@@ -7796,6 +7842,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 + " requires " + permission;
         Slog.w(TAG, msg);
         throw new SecurityException(msg);
+        */
     }
 
     /**
@@ -12751,6 +12798,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public void setHasTopUi(boolean hasTopUi) throws RemoteException {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(permission.INTERNAL_SYSTEM_WINDOW) != PERMISSION_GRANTED) {
             String msg = "Permission Denial: setHasTopUi() from pid="
                     + Binder.getCallingPid()
@@ -12759,6 +12808,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         final int pid = Binder.getCallingPid();
         final long origId = Binder.clearCallingIdentity();
         try {
@@ -17204,6 +17254,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         // For apps that don't have pre-defined UIDs, check for permission
         if (UserHandle.getAppId(aInfo.uid) >= Process.FIRST_APPLICATION_UID) {
             if ((flags & ServiceInfo.FLAG_SINGLE_USER) != 0) {
+                // ananbox: disable permission check
+                /*
                 if (ActivityManager.checkUidPermission(
                         INTERACT_ACROSS_USERS,
                         aInfo.uid) != PackageManager.PERMISSION_GRANTED) {
@@ -17214,6 +17266,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Slog.w(TAG, msg);
                     throw new SecurityException(msg);
                 }
+                */
                 // Permission passed
                 result = true;
             }
@@ -17908,6 +17961,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                 // See if the caller is allowed to do this.  Note we are checking against
                 // the actual real caller (not whoever provided the operation as say a
                 // PendingIntent), because that who is actually supplied the arguments.
+                // ananbox: disable permission check
+                /*
                 if (checkComponentPermission(
                         android.Manifest.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST,
                         Binder.getCallingPid(), Binder.getCallingUid(), -1, true)
@@ -17920,6 +17975,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Slog.w(TAG, msg);
                     throw new SecurityException(msg);
                 }
+                */
             }
         }
 
@@ -17950,6 +18006,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         // First line security check before anything else: stop non-system apps from
         // sending protected broadcasts.
+        // ananbox: disable this protection
+        /*
         if (!isCallerSystem) {
             if (isProtectedBroadcast) {
                 String msg = "Permission Denial: not allowed to send broadcast "
@@ -17987,6 +18045,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }
+        */
 
         if (action != null) {
             switch (action) {
@@ -18000,6 +18059,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                     // Handle special intents: if this broadcast is from the package
                     // manager about a package being removed, we need to remove all of
                     // its activities from the history stack.
+                    // ananbox: disable this permission check
+                    /*
                     if (checkComponentPermission(
                             android.Manifest.permission.BROADCAST_PACKAGE_REMOVED,
                             callingPid, callingUid, -1, true)
@@ -18012,6 +18073,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         Slog.w(TAG, msg);
                         throw new SecurityException(msg);
                     }
+                    */
                     switch (action) {
                         case Intent.ACTION_UID_REMOVED:
                             final Bundle intentExtras = intent.getExtras();
@@ -18217,6 +18279,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         // Add to the sticky list if requested.
         if (sticky) {
+            // ananbox: disable permission check
+            /*
             if (checkPermission(android.Manifest.permission.BROADCAST_STICKY,
                     callingPid, callingUid)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -18231,6 +18295,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                         + " and enforce permissions " + Arrays.toString(requiredPermissions));
                 return ActivityManager.BROADCAST_STICKY_CANT_HAVE_PERMISSION;
             }
+            */
             if (intent.getComponent() != null) {
                 throw new SecurityException(
                         "Sticky broadcasts can't target a specific component");
@@ -18557,6 +18622,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                 userId, true, ALLOW_NON_FULL, "removeStickyBroadcast", null);
 
         synchronized(this) {
+            // ananbox: disable permission check
+            /*
             if (checkCallingPermission(android.Manifest.permission.BROADCAST_STICKY)
                     != PackageManager.PERMISSION_GRANTED) {
                 String msg = "Permission Denial: unbroadcastIntent() from pid="
@@ -18566,6 +18633,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 Slog.w(TAG, msg);
                 throw new SecurityException(msg);
             }
+            */
             ArrayMap<String, ArrayList<Intent>> stickies = mStickyBroadcasts.get(userId);
             if (stickies != null) {
                 ArrayList<Intent> list = stickies.get(intent.getAction());
@@ -18671,6 +18739,8 @@ public final class ActivityManagerService extends ActivityManagerNative
                 return false;
             }
 
+            // ananbox: disable permission check
+            /*
             int match = mContext.getPackageManager().checkSignatures(
                     ii.targetPackage, ii.packageName);
             if (match < 0 && match != PackageManager.SIGNATURE_FIRST_NOT_SIGNED) {
@@ -18684,6 +18754,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 reportStartInstrumentationFailureLocked(watcher, className, msg);
                 throw new SecurityException(msg);
             }
+            */
 
             final long origId = Binder.clearCallingIdentity();
             // Instrumentation can kill and relaunch even persistent processes
@@ -18873,6 +18944,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     private void enforceWriteSettingsPermission(String func) {
+        // ananbox: disable permission check
+        return;
+        /*
         int uid = Binder.getCallingUid();
         if (uid == Process.ROOT_UID) {
             return;
@@ -18889,6 +18963,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 + " requires " + android.Manifest.permission.WRITE_SETTINGS;
         Slog.w(TAG, msg);
         throw new SecurityException(msg);
+        */
     }
 
     public void updateConfiguration(Configuration values) {
@@ -21689,6 +21764,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public boolean isUserRunning(int userId, int flags) {
+        // ananbox: disable permission check
+        /*
         if (!mUserController.isSameProfileGroup(userId, UserHandle.getCallingUserId())
                 && checkCallingPermission(INTERACT_ACROSS_USERS)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -21699,6 +21776,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         synchronized (this) {
             return mUserController.isUserRunningLocked(userId, flags);
         }
@@ -21706,6 +21784,8 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     @Override
     public int[] getRunningUserIds() {
+        // ananbox: disable permission check
+        /*
         if (checkCallingPermission(INTERACT_ACROSS_USERS)
                 != PackageManager.PERMISSION_GRANTED) {
             String msg = "Permission Denial: isUserRunning() from pid="
@@ -21715,6 +21795,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             Slog.w(TAG, msg);
             throw new SecurityException(msg);
         }
+        */
         synchronized (this) {
             return mUserController.getStartedUserArrayLocked();
         }

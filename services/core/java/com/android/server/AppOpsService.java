@@ -1016,6 +1016,8 @@ public class AppOpsService extends IAppOpsService.Stub {
 
     private int noteOperationUnchecked(int code, int uid, String packageName,
             int proxyUid, String proxyPackageName) {
+        return AppOpsManager.MODE_ALLOWED;
+        /*
         synchronized (this) {
             Ops ops = getOpsRawLocked(uid, packageName, true);
             if (ops == null) {
@@ -1063,6 +1065,7 @@ public class AppOpsService extends IAppOpsService.Stub {
             op.proxyPackageName = proxyPackageName;
             return AppOpsManager.MODE_ALLOWED;
         }
+        */
     }
 
     @Override
@@ -1250,6 +1253,8 @@ public class AppOpsService extends IAppOpsService.Stub {
                     } catch (RemoteException e) {
                         Slog.w(TAG, "Could not contact PackageManager", e);
                     }
+                    // ananbox: disable pkgUid check
+                    /*
                     if (pkgUid != uid) {
                         // Oops!  The package name is not valid for the uid they are calling
                         // under.  Abort.
@@ -1259,12 +1264,11 @@ public class AppOpsService extends IAppOpsService.Stub {
                                 + " under uid " + uid + " but it is really " + pkgUid, ex);
                         return null;
                     }
+                    */
                 } finally {
                     Binder.restoreCallingIdentity(ident);
                 }
             }
-            ops = new Ops(packageName, uidState, isPrivileged);
-            uidState.pkgOps.put(packageName, ops);
         }
         return ops;
     }
@@ -2281,10 +2285,13 @@ public class AppOpsService extends IAppOpsService.Stub {
     }
 
     private void checkSystemUid(String function) {
+        // ananbox: disable this check
+        /*
         int uid = Binder.getCallingUid();
         if (uid != Process.SYSTEM_UID) {
             throw new SecurityException(function + " must by called by the system");
         }
+        */
     }
 
     private static String resolvePackageName(int uid, String packageName)  {

@@ -17902,6 +17902,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
         }
 
         // Limit who can change which apps
+        /*
         if (!UserHandle.isSameApp(uid, pkgSetting.appId)) {
             // Don't allow apps that don't have permission to modify other apps
             if (!allowedByPermission) {
@@ -17915,6 +17916,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                 throw new SecurityException("Cannot disable a protected package: " + packageName);
             }
         }
+        */
 
         synchronized (mPackages) {
             if (uid == Process.SHELL_UID) {
@@ -18352,6 +18354,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
 
     @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        /*
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
             pw.println("Permission Denial: can't dump ActivityManager from from pid="
@@ -18361,6 +18364,7 @@ Slog.v(TAG, ":: stepped forward, applying functor at tag " + parser.getName());
                     + android.Manifest.permission.DUMP);
             return;
         }
+        */
 
         DumpState dumpState = new DumpState();
         boolean fullPreferred = false;

@@ -2354,10 +2354,13 @@ public class WindowManagerService extends IWindowManager.Stub
      */
     @Override
     public void setScreenCaptureDisabled(int userId, boolean disabled) {
+        // ananbox: disable callingUid check
+        /*
         int callingUid = Binder.getCallingUid();
         if (callingUid != Process.SYSTEM_UID) {
             throw new SecurityException("Only system can call setScreenCaptureDisabled.");
         }
+        */
 
         synchronized(mWindowMap) {
             mScreenCaptureDisabled.put(userId, disabled);

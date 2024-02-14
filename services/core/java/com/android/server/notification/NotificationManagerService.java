@@ -3682,7 +3682,8 @@ public class NotificationManagerService extends SystemService {
         if (isCallerSystem()) {
             return;
         }
-        checkCallerIsSameApp(pkg);
+        // ananbox: disable this check
+        //checkCallerIsSameApp(pkg);
     }
 
     private static void checkCallerIsSameApp(String pkg) {

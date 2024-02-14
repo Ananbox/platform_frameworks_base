@@ -1596,25 +1596,34 @@ public class ConnectivityService extends IConnectivityManager.Stub
     }
 
     private void enforceAccessPermission() {
+        // ananbox: disable permission check
+        /*
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.ACCESS_NETWORK_STATE,
                 "ConnectivityService");
+                */
     }
 
     private void enforceChangePermission() {
+        /*
         ConnectivityManager.enforceChangePermission(mContext);
+        */
     }
 
     private void enforceTetherAccessPermission() {
+        /*
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.ACCESS_NETWORK_STATE,
                 "ConnectivityService");
+                */
     }
 
     private void enforceConnectivityInternalPermission() {
+        /*
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CONNECTIVITY_INTERNAL,
                 "ConnectivityService");
+                */
     }
 
     private void enforceConnectivityRestrictedNetworksPermission() {
@@ -1625,10 +1634,11 @@ public class ConnectivityService extends IConnectivityManager.Stub
             return;
         } catch (SecurityException e) { /* fallback to ConnectivityInternalPermission */ }
         enforceConnectivityInternalPermission();
+        
     }
 
     private void enforceKeepalivePermission() {
-        mContext.enforceCallingOrSelfPermission(KeepaliveTracker.PERMISSION, "ConnectivityService");
+        //mContext.enforceCallingOrSelfPermission(KeepaliveTracker.PERMISSION, "ConnectivityService");
     }
 
     // Public because it's used by mLockdownTracker.
@@ -4250,6 +4260,9 @@ public class ConnectivityService extends IConnectivityManager.Stub
     // WifiManager registers a network listen for the purpose of calling setProcessDefaultNetwork.
     // This ensures it has permission to do so.
     private boolean hasWifiNetworkListenPermission(NetworkCapabilities nc) {
+        // ananbox: grant wifinetworkListenPermission
+        return true;
+        /*
         if (nc == null) {
             return false;
         }
@@ -4265,6 +4278,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             return false;
         }
         return true;
+        */
     }
 
     @Override
@@ -4275,6 +4289,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         }
 
         NetworkCapabilities nc = new NetworkCapabilities(networkCapabilities);
+        /*
         if (!ConnectivityManager.checkChangePermission(mContext)) {
             // Apps without the CHANGE_NETWORK_STATE permission can't use background networks, so
             // make all their listens include NET_CAPABILITY_FOREGROUND. That way, they will get
@@ -4283,6 +4298,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             // can't request networks.
             nc.addCapability(NET_CAPABILITY_FOREGROUND);
         }
+        */
 
         NetworkRequest networkRequest = new NetworkRequest(nc, TYPE_NONE, nextNetworkRequestId(),
                 NetworkRequest.Type.LISTEN);

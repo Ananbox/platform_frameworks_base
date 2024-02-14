@@ -1598,6 +1598,8 @@ public class LocationManagerService extends ILocationManager.Stub {
     }
 
     private void checkPackageName(String packageName) {
+        // ananbox: disable this check
+        /*
         if (packageName == null) {
             throw new SecurityException("invalid package name: " + packageName);
         }
@@ -1610,6 +1612,7 @@ public class LocationManagerService extends ILocationManager.Stub {
             if (packageName.equals(pkg)) return;
         }
         throw new SecurityException("invalid package name: " + packageName);
+        */
     }
 
     private void checkPendingIntent(PendingIntent intent) {

@@ -1562,7 +1562,10 @@ public final class JobSchedulerService extends com.android.server.SystemService
         private void enforceValidJobRequest(int uid, JobInfo job) {
             final IPackageManager pm = AppGlobals.getPackageManager();
             final ComponentName service = job.getService();
+            // ananbox: disable uid check
+            /*
             try {
+                // ananbox: disable uid check
                 ServiceInfo si = pm.getServiceInfo(service,
                         PackageManager.MATCH_DIRECT_BOOT_AWARE
                                 | PackageManager.MATCH_DIRECT_BOOT_UNAWARE,
@@ -1581,6 +1584,7 @@ public final class JobSchedulerService extends com.android.server.SystemService
             } catch (RemoteException e) {
                 // Can't happen; the Package Manager is in this same process
             }
+            */
         }
 
         private boolean canPersistJobs(int pid, int uid) {
