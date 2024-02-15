@@ -1586,10 +1586,13 @@ public class UserManagerService extends IUserManager.Stub {
      * @throws SecurityException if the caller is not system or root
      */
     private static void checkSystemOrRoot(String message) {
+        // ananbox: disable permission check
+        /*
         final int uid = Binder.getCallingUid();
         if (!UserHandle.isSameApp(uid, Process.SYSTEM_UID) && uid != Process.ROOT_UID) {
             throw new SecurityException("Only system may: " + message);
         }
+        */
     }
 
     private void writeBitmapLP(UserInfo info, Bitmap bitmap) {

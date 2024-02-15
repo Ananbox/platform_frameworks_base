@@ -2399,10 +2399,13 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     private static void enforceSystemUid() {
+        // ananbox: disable permission check
+        /*
         final int uid = Binder.getCallingUid();
         if (uid != Process.SYSTEM_UID) {
             throw new SecurityException("Only available to AID_SYSTEM");
         }
+        */
     }
 
     @Override

@@ -242,6 +242,8 @@ public class LauncherAppsService extends SystemService {
 
         @VisibleForTesting // We override it in unit tests
         void verifyCallingPackage(String callingPackage) {
+            // ananbox: disable permission check
+            /*
             int packageUid = -1;
             try {
                 packageUid = mPm.getPackageUidAsUser(callingPackage,
@@ -255,6 +257,7 @@ public class LauncherAppsService extends SystemService {
             if (packageUid != Binder.getCallingUid()) {
                 throw new SecurityException("Calling package name mismatch");
             }
+            */
         }
 
         /**
