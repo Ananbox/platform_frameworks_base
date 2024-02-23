@@ -2271,10 +2271,13 @@ public class WindowManagerService extends IWindowManager.Stub
                 ApplicationInfo appInfo = mContext.getPackageManager()
                         .getApplicationInfoAsUser(packageName, 0,
                                 UserHandle.getUserId(callingUid));
+                // ananbox: disable this uid check
+                /*
                 if (appInfo.uid != callingUid) {
                     throw new SecurityException("Package " + packageName + " not in UID "
                             + callingUid);
                 }
+                */
                 if (appInfo.targetSdkVersion > Build.VERSION_CODES.N_MR1) {
                     return true;
                 }
