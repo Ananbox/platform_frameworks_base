@@ -84,7 +84,8 @@ public final class UserHandle implements Parcelable {
      * @hide Enable multi-user related side effects. Set this to false if
      * there are problems with single user use-cases.
      */
-    public static final boolean MU_ENABLED = true;
+    // ananbox: disable multi-user
+    public static final boolean MU_ENABLED = false;
 
     final int mHandle;
 
