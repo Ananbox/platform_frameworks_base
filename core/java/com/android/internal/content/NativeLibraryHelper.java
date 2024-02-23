@@ -275,9 +275,9 @@ public class NativeLibraryHelper {
                 throw new IOException("Cannot chmod native library directory "
                         + path.getPath(), e);
             }
-        } else if (!SELinux.restorecon(path)) {
+        } /* else if (!SELinux.restorecon(path)) {
             throw new IOException("Cannot set SELinux context for " + path.getPath());
-        }
+        }*/
     }
 
     private static long sumNativeBinariesForSupportedAbi(Handle handle, String[] abiList) {

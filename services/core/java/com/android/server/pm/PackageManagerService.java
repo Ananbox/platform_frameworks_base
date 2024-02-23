@@ -13514,10 +13514,12 @@ public class PackageManagerService extends IPackageManager.Stub {
                 return false;
             }
 
+            /*
             if (!SELinux.restoreconRecursive(afterCodeFile)) {
                 Slog.w(TAG, "Failed to restorecon");
                 return false;
             }
+            */
 
             // Reflect the rename internally
             codeFile = afterCodeFile;

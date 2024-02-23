@@ -807,9 +807,12 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
             throw new IOException("Failed to prepare session dir: " + stageDir, e);
         }
 
+        // ananbox: disable restorecon
+        /*
         if (!SELinux.restorecon(stageDir)) {
             throw new IOException("Failed to restorecon session dir: " + stageDir);
         }
+        */
     }
 
     private String buildExternalStageCid(int sessionId) {
@@ -941,12 +944,16 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
     }
 
     private boolean isCallingUidOwner(PackageInstallerSession session) {
+        // ananbox: disable uid check
+        return true;
+        /*
         final int callingUid = Binder.getCallingUid();
         if (callingUid == Process.ROOT_UID) {
             return true;
         } else {
             return (session != null) && (callingUid == session.installerUid);
         }
+        */
     }
 
     static class PackageDeleteObserverAdapter extends PackageDeleteObserver {
