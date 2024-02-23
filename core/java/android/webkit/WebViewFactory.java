@@ -182,11 +182,14 @@ public final class WebViewFactory {
             // us honest and minimize usage of WebView internals when binding the proxy.
             if (sProviderInstance != null) return sProviderInstance;
 
+            // ananbox: disable webview check
+            /*
             final int uid = android.os.Process.myUid();
             if (uid == android.os.Process.ROOT_UID || uid == android.os.Process.SYSTEM_UID) {
                 throw new UnsupportedOperationException(
                         "For security reasons, WebView is not allowed in privileged processes");
             }
+            */
 
             StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskReads();
             Trace.traceBegin(Trace.TRACE_TAG_WEBVIEW, "WebViewFactory.getProvider()");
