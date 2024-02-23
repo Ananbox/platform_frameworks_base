@@ -947,6 +947,15 @@ public class IpManager extends StateMachine {
     private boolean startIPv4() {
         // If we have a StaticIpConfiguration attempt to apply it and
         // handle the result accordingly.
+        // ananbox: hack dhcp result
+        DhcpResults dhcpResults = new DhcpResults();
+        dhcpResults.setGateway("1.2.3.4");
+        dhcpResults.setIpAddress("192.168.1.100", 0);
+        dhcpResults.addDns("8.8.8.8");
+        dhcpResults.setLeaseDuration(3600);
+        mCallback.onNewDhcpResults(dhcpResults);
+        mCallback.onProvisioningSuccess(new LinkProperties());
+        /*
         if (mConfiguration.mStaticIpConfig != null) {
             if (setIPv4Address(mConfiguration.mStaticIpConfig.ipAddress)) {
                 handleIPv4Success(new DhcpResults(mConfiguration.mStaticIpConfig));
@@ -962,6 +971,7 @@ public class IpManager extends StateMachine {
             mDhcpClient.registerForPreDhcpNotification();
             mDhcpClient.sendMessage(DhcpClient.CMD_START_DHCP);
         }
+        */
 
         return true;
     }
