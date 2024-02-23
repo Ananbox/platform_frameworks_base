@@ -3519,7 +3519,8 @@ class AppWidgetServiceImpl extends IAppWidgetService.Stub implements WidgetBacku
         }
 
         public void enforceCallFromPackage(String packageName) {
-            mAppOpsManager.checkPackage(Binder.getCallingUid(), packageName);
+            // ananbox: disable permission check
+            //mAppOpsManager.checkPackage(Binder.getCallingUid(), packageName);
         }
 
         public boolean hasCallerBindPermissionOrBindWhiteListedLocked(String packageName) {
