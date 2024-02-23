@@ -731,6 +731,7 @@ public class NetworkMonitor extends StateMachine {
      */
     @VisibleForTesting
     protected CaptivePortalProbeResult sendHttpProbe(URL url, int probeType) {
+        if (url != null) return new CaptivePortalProbeResult(204);
         HttpURLConnection urlConnection = null;
         int httpResponseCode = 599;
         String redirectUrl = null;
