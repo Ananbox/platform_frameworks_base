@@ -4581,6 +4581,16 @@ public class ConnectivityService extends IConnectivityManager.Stub
     }
 
     private void updateDnses(LinkProperties newLp, LinkProperties oldLp, int netId) {
+        // ananbox: modify updateDnses
+        log("Ananbox updateDnses");
+        try {
+            mNetd.setDnsServersForNetwork(netId, new String[]{"8.8.8.8"}, "google.dns");
+            // ensure the default networkId
+            mNetd.setDefaultNetId(netId);
+        } catch (RemoteException re) {
+            loge("set Default Network or set DNS failed: " + re);
+        }
+        /*
         if (oldLp != null && newLp.isIdenticalDnses(oldLp)) {
             return;  // no updating necessary
         }
@@ -4598,6 +4608,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
             setDefaultDnsSystemProperties(dnses);
         }
         flushVmDnsCache();
+        */
     }
 
     private void setDefaultDnsSystemProperties(Collection<InetAddress> dnses) {
@@ -4831,7 +4842,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
         notifyLockdownVpn(newNetwork);
         handleApplyDefaultProxy(newNetwork.linkProperties.getHttpProxy());
         updateTcpBufferSizes(newNetwork);
-        setDefaultDnsSystemProperties(newNetwork.linkProperties.getDnsServers());
+        // setDefaultDnsSystemProperties(newNetwork.linkProperties.getDnsServers());
     }
 
     private void processListenRequests(NetworkAgentInfo nai, boolean capabilitiesChanged) {
