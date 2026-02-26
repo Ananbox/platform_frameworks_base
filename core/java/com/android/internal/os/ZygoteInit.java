@@ -310,8 +310,6 @@ public class ZygoteInit {
         // We need to drop root perms only if we're already root. In the case of "wrapped"
         // processes (see WrapperInit), this function is called from an unprivileged uid
         // and gid.
-        // ananbox: disable setregid & setreuid
-        /*
         boolean droppedPriviliges = false;
         if (reuid == ROOT_UID && regid == ROOT_GID) {
             try {
@@ -323,7 +321,6 @@ public class ZygoteInit {
 
             droppedPriviliges = true;
         }
-        */
 
         // Alter the target heap utilization.  With explicit GCs this
         // is not likely to have any effect.
@@ -387,8 +384,6 @@ public class ZygoteInit {
             Trace.traceEnd(Trace.TRACE_TAG_DALVIK);
 
             // Bring back root. We'll need it later if we're in the zygote.
-            // ananbox: disable droppedPriviliges
-            /*
             if (droppedPriviliges) {
                 try {
                     Os.setreuid(ROOT_UID, ROOT_UID);
@@ -397,7 +392,6 @@ public class ZygoteInit {
                     throw new RuntimeException("Failed to restore root", ex);
                 }
             }
-            */
         }
     }
 

@@ -162,8 +162,6 @@ static void verifySystemIdmaps()
                     exit(1);
                 }
 
-                // ananbox: disable setgid & setuid
-#if 0
                 if (setgid(AID_SYSTEM) != 0) {
                     ALOGE("setgid: %s\n", strerror(errno));
                     exit(1);
@@ -173,7 +171,6 @@ static void verifySystemIdmaps()
                     ALOGE("setuid: %s\n", strerror(errno));
                     exit(1);
                 }
-#endif
 
                 // Generic idmap parameters
                 const char* argv[7];
