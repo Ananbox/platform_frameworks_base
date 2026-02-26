@@ -1187,6 +1187,8 @@ public class IpManager extends StateMachine {
                 }
             }
 
+            // ananbox: avoid crash when connecting wifi
+            /*
             if (mConfiguration.mUsingIpReachabilityMonitor) {
                 mIpReachabilityMonitor = new IpReachabilityMonitor(
                         mContext,
@@ -1199,6 +1201,7 @@ public class IpManager extends StateMachine {
                         },
                         mAvoidBadWifiTracker);
             }
+            */
         }
 
         @Override
