@@ -576,8 +576,6 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
       android::PreInitializeNativeBridge(data_dir.c_str(), isa_string.c_str());
     }
 
-    // ananbox: disable setresgid, setresuid
-#if 0
     int rc = setresgid(gid, gid, gid);
     if (rc == -1) {
       ALOGE("setresgid(%d) failed: %s", gid, strerror(errno));
@@ -589,7 +587,6 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
       ALOGE("setresuid(%d) failed: %s", uid, strerror(errno));
       RuntimeAbort(env, __LINE__, "setresuid failed");
     }
-#endif
 
     if (NeedsNoRandomizeWorkaround()) {
         // Work around ARM kernel ASLR lossage (http://b/5817320).
