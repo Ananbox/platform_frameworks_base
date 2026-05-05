@@ -5992,6 +5992,8 @@ public class WindowManagerService extends IWindowManager.Stub
         boolean wallpaperEnabled = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_enableWallpaperService)
                 && !mOnlyCore;
+        // ananbox: do not wait wallpaper
+        wallpaperEnabled = false;
         boolean haveKeyguard = true;
         // TODO(multidisplay): Expand to all displays?
         final WindowList windows = getDefaultWindowListLocked();
